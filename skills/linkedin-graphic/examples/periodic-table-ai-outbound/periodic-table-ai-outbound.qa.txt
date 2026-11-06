@@ -1,0 +1,1 @@
+canvas 1080×1350  motion 8000ms  text elements 252  words 373  images 12

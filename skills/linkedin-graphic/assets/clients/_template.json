@@ -1,0 +1,22 @@
+{
+  "slug": "client-slug",
+  "name": "Full Name",
+  "role": "Founder",
+  "company": "Company",
+  "domain": "company.com",
+  "headshot": "assets/clients/client-slug/headshot.jpg",
+  "logo": "assets/clients/client-slug/logo.svg",
+  "brand": {
+    "accent": "#4C8DFF",
+    "accent2": null,
+    "theme_preference": ["ink", "paper"]
+  },
+  "audience": "Who reads their posts, in one line (e.g. founders of $1–10M B2B SaaS)",
+  "identity_slot": "author-pill-top",
+  "cta_style": "Comment \"{KEYWORD}\" and I'll send you {the thing}",
+  "proof_lines": [
+    "TRUE, SPECIFIC PROOF LINE FOR THE FOOTER"
+  ],
+  "content_skill": null,
+  "used_metaphors": []
+}

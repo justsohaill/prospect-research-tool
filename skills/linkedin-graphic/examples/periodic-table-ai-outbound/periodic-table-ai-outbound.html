@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="canvas" content="1080x1350">
+<meta name="motion" content="duration=8000; still=end">
+<title>Periodic Table of AI Outbound</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300..900;1,300..900&family=Inter:wght@300..800&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=block" rel="stylesheet">
+<style>
+:root{--W:1080px;--H:1350px;--pad:64px;--r-lg:22px;
+  --f-display:"Inter Tight",Inter,system-ui,sans-serif;--f-body:Inter,system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,monospace;--f-serif:"Instrument Serif",Georgia,serif}
+[data-theme="paper"]{--bg:#F3EEE6;--bg-2:#EBE4D8;--surface:#FBF8F3;--surface-2:#FFFFFF;
+  --ink:#16130F;--ink-2:#4A443C;--ink-3:#857E73;--line:#DDD5C8;--line-2:#CFC5B5;--grid:rgba(60,45,25,.065);
+  --accent:#16130F;--mark:#F6E27A;
+  --shadow:0 1px 0 rgba(255,255,255,.8) inset,0 10px 26px -14px rgba(60,40,20,.28),0 2px 5px -2px rgba(60,40,20,.10)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#d9d9d9}
+body{display:grid;place-items:center;min-height:100vh;-webkit-font-smoothing:antialiased}
+#canvas{position:relative;width:var(--W);height:var(--H);overflow:hidden;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-feature-settings:"tnum"}
+.bg-grid{position:absolute;inset:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+.bg-noise{position:absolute;inset:0;opacity:.07;mix-blend-mode:multiply;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.crop{position:absolute;width:14px;height:14px;border-color:var(--ink-3);border-style:solid;opacity:.6}
+.crop.tl{top:28px;left:28px;border-width:1.5px 0 0 1.5px}.crop.tr{top:28px;right:28px;border-width:1.5px 1.5px 0 0}
+.crop.bl{bottom:28px;left:28px;border-width:0 0 1.5px 1.5px}.crop.br{bottom:28px;right:28px;border-width:0 1.5px 1.5px 0}
+.eyebrow{font:600 11.5px/1 var(--f-mono);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+
+/* header */
+.top{position:absolute;left:73px;right:73px;top:50px;display:flex;justify-content:space-between;align-items:center}
+.brand{display:flex;align-items:center;gap:9px;font:700 21px var(--f-display);letter-spacing:-.03em}
+.h1{position:absolute;left:73px;right:60px;top:92px;font:400 84px/.94 var(--f-display);letter-spacing:-.058em}
+.hl-mark{background:linear-gradient(transparent 12%,var(--mark) 12%,var(--mark) 92%,transparent 92%);padding:0 .06em;margin:0 -.03em}
+.sub{position:absolute;left:75px;top:262px;font:italic 400 27px/1.1 var(--f-serif);color:var(--ink-2)}
+
+/* table */
+#table{position:absolute;left:73px;top:318px;width:934px;height:582px}
+.el{position:absolute;width:88px;height:92px;border-radius:9px;padding:7px 8px;
+  background:color-mix(in srgb,var(--c) 11%,#fff);
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--c) 32%,transparent) inset,0 6px 14px -10px rgba(60,40,20,.5)}
+.el .n{position:absolute;left:8px;top:7px;font:600 10.5px var(--f-mono);color:color-mix(in srgb,var(--c) 70%,#000);opacity:.85}
+.el .lg{position:absolute;right:7px;top:7px;width:17px;height:17px;border-radius:5px;background:#fff;display:grid;place-items:center;box-shadow:0 0 0 1px rgba(0,0,0,.07)}
+.el .lg img{width:11px;height:11px;object-fit:contain}
+.el .sy{position:absolute;left:7px;top:23px;font:700 31px/1 var(--f-display);letter-spacing:-.04em;color:color-mix(in srgb,var(--c) 82%,#000)}
+.el .nm{position:absolute;left:7px;right:4px;top:59px;font:600 11px/1 var(--f-body);letter-spacing:-.03em;white-space:nowrap}
+.el .rl{position:absolute;left:7px;right:4px;top:74px;font:400 10.5px/1 var(--f-body);color:var(--ink-3);white-space:nowrap}
+.el .ring{position:absolute;inset:-5px;border-radius:13px;border:2px solid var(--ink);opacity:0}
+
+/* legend in the top gap */
+#legend{position:absolute;left:94px;top:0;width:746px;height:92px;display:grid;grid-template-columns:repeat(3,1fr);
+  align-content:center;row-gap:11px;column-gap:10px;padding:0 22px}
+#legend div{display:flex;align-items:center;gap:8px;font:600 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);white-space:nowrap}
+#legend i{width:10px;height:10px;border-radius:3px;background:var(--c)}
+#legend b{font-weight:500;color:var(--ink-3);letter-spacing:0}
+
+/* how-to-read key */
+#key{position:absolute;left:188px;top:98px;width:276px;height:184px;border:1px dashed var(--line-2);border-radius:12px;padding:16px}
+#key .el{position:relative;transform:scale(1.18);transform-origin:top left;--c:#13A07A}
+#key .ann{position:absolute;left:132px;font:500 10.5px/1.25 var(--f-mono);color:var(--ink-3);letter-spacing:.02em}
+#key .ann::before{content:"";position:absolute;right:calc(100% + 6px);top:6px;width:18px;border-top:1px solid var(--line-2)}
+#key .ttl{position:absolute;left:16px;bottom:13px;font:600 10.5px var(--f-mono);letter-spacing:.18em;color:var(--ink-3)}
+
+/* compound */
+#compound{position:absolute;left:73px;right:73px;top:924px;height:136px;border-radius:18px;background:#fff;box-shadow:var(--shadow);border:1px solid var(--line)}
+#compound .eyebrow{position:absolute;left:24px;top:20px;color:var(--ink-2)}
+.eq{position:absolute;left:24px;top:44px;display:flex;align-items:center;gap:10px}
+.eq .el{position:relative;width:66px;height:72px}
+.eq .el .sy{top:22px;font-size:26px}.eq .el .nm{top:52px;font-size:10.5px}
+.eq .op{font:300 30px var(--f-display);color:var(--ink-3);width:16px;text-align:center}
+.eq .res{position:relative;height:72px;padding:0 18px 0 14px;border-radius:10px;background:#16130F;color:#fff;display:flex;align-items:center;gap:12px}
+.eq .res .sy{font:700 30px var(--f-display);letter-spacing:-.04em;color:#F6E27A}
+.eq .res span{font:600 15px/1.15 var(--f-display);letter-spacing:-.01em}
+.eq .res small{display:block;font:500 10.5px var(--f-mono);color:#A9A296;letter-spacing:.06em;margin-top:3px}
+.steps{position:absolute;right:24px;top:44px;width:250px;display:grid;gap:7px}
+.steps div{font:400 11.5px/1.2 var(--f-body);color:var(--ink-2);white-space:nowrap}
+.steps b{font:700 11.5px var(--f-mono);color:var(--ink);margin-right:6px}
+
+/* CTA */
+.cta-wrap{position:absolute;left:73px;right:73px;top:1086px;height:92px}
+.cta{position:relative;height:92px;border-radius:999px;background:#16130F;color:#fff;display:flex;align-items:center;justify-content:center;gap:14px;
+  font:500 32px var(--f-display);letter-spacing:-.03em;z-index:1}
+.cta .kw{color:#F6E27A;font-weight:800}
+.cta .arrow{position:absolute;right:12px;top:12px;width:68px;height:68px;border-radius:50%;background:#F6E27A;color:#16130F;display:grid;place-items:center;font:700 28px var(--f-display)}
+.cta .icon{position:absolute;left:14px;top:12px;width:68px;height:68px;border-radius:50%;border:1.5px solid rgba(255,255,255,.18);display:grid;place-items:center;font:700 26px var(--f-display);color:#F6E27A;letter-spacing:-.04em}
+.cta-glow{position:absolute;inset:-10px;border-radius:999px;filter:blur(16px);opacity:.55;
+  background:conic-gradient(from var(--a,0deg),#2D5BFF,#13A07A,#F6E27A,#F08C1A,#E0452B,#8B5CF6,#2D5BFF)}
+.cta-sub{position:absolute;left:0;right:0;top:1192px;text-align:center;font:400 16px var(--f-body);color:var(--ink-3)}
+
+/* footer */
+.footer-rule{position:absolute;left:73px;right:73px;top:1236px;height:1px;background:var(--line-2)}
+.footer{position:absolute;left:73px;right:73px;top:1256px;display:flex;align-items:center;justify-content:space-between}
+.who{display:flex;align-items:center;gap:12px}
+.avatar{width:46px;height:46px;border-radius:50%;background:#2D2A25;color:#F6E27A;display:grid;place-items:center;font:700 16px var(--f-display);letter-spacing:-.03em;box-shadow:0 0 0 3px #fff,0 0 0 4.5px var(--line-2)}
+.who b{display:block;font:700 17px var(--f-display);letter-spacing:-.02em}
+.who span{font:400 13px var(--f-mono);color:var(--ink-3)}
+.tagline{font:500 10.5px/1.6 var(--f-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3);text-align:right}
+</style>
+</head>
+<body>
+<div id="canvas" data-theme="paper">
+  <div class="bg-grid"></div><div class="bg-noise"></div>
+  <i class="crop tl"></i><i class="crop tr"></i><i class="crop bl"></i><i class="crop br"></i>
+
+  <div class="top">
+    <div class="brand">
+      <svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 2l8.66 5v10L12 22l-8.66-5V7z" fill="#16130F"/><circle cx="12" cy="12" r="3.6" fill="#F6E27A"/></svg>
+      Outbound Lab
+    </div>
+    <div class="eyebrow">Issue 07 · November 2026</div>
+  </div>
+  <h1 class="h1">The Periodic Table<br>of <span class="hl-mark">AI Outbound</span></h1>
+  <p class="sub">46 tools, 9 families, and the one compound that books meetings.</p>
+
+  <div id="table">
+    <div id="legend"></div>
+    <div id="key">
+      <div class="el" style="--c:#13A07A">
+        <span class="n">12</span><span class="sy">Cl</span><span class="nm">Clay</span><span class="rl">waterfall hub</span>
+      </div>
+      <div class="ann" style="top:20px">order in the stack</div>
+      <div class="ann" style="top:52px">symbol</div>
+      <div class="ann" style="top:84px">tool</div>
+      <div class="ann" style="top:102px">its one job</div>
+      <div class="ttl">HOW TO READ</div>
+    </div>
+  </div>
+
+  <section id="compound">
+    <div class="eyebrow">The starter compound · what I'd run with one SDR</div>
+    <div class="eq" id="eq"></div>
+    <div class="steps">
+      <div><b>Sn</b>finds accounts that fit the ICP</div>
+      <div><b>Cl</b>enriches every contact, waterfall</div>
+      <div><b>Cd</b>researches + writes line one</div>
+      <div><b>In</b>sends from warmed inboxes</div>
+    </div>
+  </section>
+
+  <div class="cta-wrap"><div class="cta-glow" id="glow"></div>
+    <div class="cta"><span class="icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#F6E27A" stroke-width="1.8" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 4v-4h0A2.5 2.5 0 0 1 4 13.5z"/></svg></span>Comment <span class="kw">“ELEMENTS”</span> for the full table<span class="arrow">→</span></div>
+  </div>
+  <p class="cta-sub">Every tool, what it costs, and when to swap it out.</p>
+
+  <div class="footer-rule"></div>
+  <footer class="footer">
+    <div class="who"><div class="avatar">MT</div><div><b>Maya Torres</b><span>outboundlab.co</span></div></div>
+    <div class="tagline">Updated November 2026<br>Save it for your next stack audit</div>
+  </footer>
+</div>
+
+<script src="logos/logos.js"></script>
+<script>
+/* ── motion runtime (from assets/base.html) ── */
+const Motion=(()=>{const meta=Object.fromEntries((document.querySelector('meta[name=motion]')?.content||'').split(';').map(s=>s.trim().split('=')).filter(p=>p[0]));
+const duration=+meta.duration||8000,fns=[],rendering=new URLSearchParams(location.search).has('render');
+const api={duration,rendering,on(fn){fns.push(fn);return api},draw(t){for(const f of fns)f(t)},
+clamp:(v,a=0,b=1)=>Math.min(b,Math.max(a,v)),seg(t,a,b){return api.clamp((t-a)/(b-a))},
+ease:{out:p=>1-Math.pow(1-p,3),inOut:p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2,back:p=>1+2.7*Math.pow(p-1,3)+1.7*Math.pow(p-1,2)},
+lerp:(a,b,p)=>a+(b-a)*p};
+window.__seek=ms=>{document.getAnimations().forEach(a=>{a.pause();a.currentTime=ms});api.draw(Math.min(ms,duration))};
+window.__motion={duration,still:meta.still||'end'};
+if(rendering)document.body.classList.add('render');else{const t0=performance.now();(function loop(now){const t=(now-t0)%(duration+1500);window.__seek(Math.min(t,duration));requestAnimationFrame(loop)})(t0)}
+return api})();
+
+/* ── data ── */
+const FAM = {
+  data:{label:'Data',c:'#2D5BFF'}, signals:{label:'Signals',c:'#E0452B'}, enrich:{label:'Enrichment',c:'#13A07A'},
+  ai:{label:'AI + research',c:'#8B5CF6'}, seq:{label:'Sequencing',c:'#E8820C'}, deliv:{label:'Deliverability',c:'#0E9DB0'},
+  auto:{label:'Automation',c:'#D1478F'}, crm:{label:'CRM',c:'#3A3F4B'}, meet:{label:'Meetings',c:'#A88300'},
+};
+const E = [ // [symbol, name, job, family]
+ ['Ap','Apollo','contact data','data'],['Zi','ZoomInfo','contact data','data'],['Sn','Sales Nav','account search','data'],
+ ['Oc','Ocean.io','lookalikes','data'],['Cb','Crunchbase','funding data','data'],['Bw','BuiltWith','tech stack','data'],
+ ['Rb','RB2B','site visitors','signals'],['Cr','Common Room','intent signals','signals'],['Tg','Trigify','post engagers','signals'],
+ ['Ko','Koala','product intent','signals'],['Bo','Bombora','topic surges','signals'],
+ ['Cl','Clay','waterfall hub','enrich'],['Pr','Prospeo','work emails','enrich'],['Fe','FullEnrich','mobiles','enrich'],
+ ['Fm','Findymail','verified emails','enrich'],['Lm','LeadMagic','email finder','enrich'],['Hu','Hunter','domain search','enrich'],
+ ['Cd','Claude','research, copy','ai'],['Gp','ChatGPT','copy drafts','ai'],['Px','Perplexity','deep research','ai'],
+ ['Ex','Exa','search API','ai'],['Fc','Firecrawl','site scraping','ai'],['Gm','Gemini','long context','ai'],
+ ['In','Instantly','cold email','seq'],['Sm','Smartlead','cold email','seq'],['Le','Lemlist','multichannel','seq'],
+ ['Hr','HeyReach','LinkedIn DMs','seq'],['Ou','Outreach','enterprise seq.','seq'],['Sl','Salesloft','enterprise seq.','seq'],
+ ['Gw','Workspace','Google inboxes','deliv'],['Ms','Microsoft 365','Outlook boxes','deliv'],['Mf','Mailforge','bulk domains','deliv'],
+ ['Mx','MXToolbox','DNS checks','deliv'],['Ga','GlockApps','inbox tests','deliv'],
+ ['N8','n8n','workflows','auto'],['Mk','Make','workflows','auto'],['Za','Zapier','app glue','auto'],
+ ['Ra','Relevance AI','AI agents','auto'],['Cc','Claude Code','builds it all','auto'],
+ ['Hs','HubSpot','CRM','crm'],['Sf','Salesforce','CRM','crm'],['At','Attio','CRM','crm'],['Pd','Pipedrive','CRM','crm'],
+ ['Ca','Calendly','booking','meet'],['Cp','Chili Piper','routing','meet'],['Go','Gong','call intel','meet'],
+];
+/* periodic shape: slots in column-major order (col, row) — 10 cols × 6 rows with the classic top gap */
+const SLOTS=[]; const rowsFor=c=>c===0||c===9?[0,1,2,3,4,5]:(c===1||c>=5)?[1,2,3,4,5]:[3,4,5];
+for(let c=0;c<10;c++) for(const r of rowsFor(c)) SLOTS.push([c,r]);
+const CW=88,CH=92,G=6, table=document.getElementById('table');
+const L=window.LOGOS||{};
+const logo=name=>{const l=L[name];return l&&!String(l.source).startsWith('monogram')?`<span class="lg"><img src="${l.file}"></span>`:''};
+const els=E.map(([sy,nm,rl,f],i)=>{
+  const [c,r]=SLOTS[i]; const d=document.createElement('div');
+  d.className='el'; d.style.cssText=`--c:${FAM[f].c};left:${c*(CW+G)}px;top:${r*(CH+G)}px`;
+  d.innerHTML=`<span class="n">${i+1}</span>${logo(nm)}<span class="sy">${sy}</span><span class="nm">${nm}</span><span class="rl">${rl}</span><i class="ring"></i>`;
+  table.appendChild(d); return d;
+});
+/* legend with counts */
+const counts={}; E.forEach(e=>counts[e[3]]=(counts[e[3]]||0)+1);
+document.getElementById('legend').innerHTML=Object.entries(FAM).map(([k,v])=>`<div style="--c:${v.c}"><i></i>${v.label}<b>${counts[k]}</b></div>`).join('');
+/* compound equation */
+const STARTER=['Sn','Cl','Cd','In'];
+const eq=document.getElementById('eq');
+eq.innerHTML=STARTER.map((s,i)=>{const e=E.find(x=>x[0]===s);return (i?'<span class="op">+</span>':'')+
+  `<div class="el" style="--c:${FAM[e[3]].c}"><span class="n">${E.indexOf(e)+1}</span><span class="sy">${s}</span><span class="nm">${e[1]}</span></div>`}).join('')+
+  `<span class="op">→</span><div class="res"><span class="sy">Mt</span><span>Meetings<small>BOOKED WEEKLY</small></span></div>`;
+
+/* ── motion ── */
+const {seg,ease}=Motion;
+const eqParts=[...eq.children];
+const starterIdx=STARTER.map(s=>E.findIndex(e=>e[0]===s));
+const glow=document.getElementById('glow');
+Motion.on(t=>{
+  els.forEach((d,i)=>{                       // 1. elements fill in by atomic number
+    const p=ease.out(seg(t,250+i*75,700+i*75));
+    d.style.opacity=.18+.82*p; d.style.transform=`translateY(${(1-p)*8}px)`;
+  });
+  starterIdx.forEach((ei,k)=>{               // 2. starter elements light up in turn
+    const a=4300+k*380, p=seg(t,a,a+300);
+    const ring=els[ei].querySelector('.ring'); ring.style.opacity=p;
+    const s=1+.07*Math.sin(Math.PI*seg(t,a,a+600)); els[ei].style.transform=`scale(${s})`; els[ei].style.zIndex=2;
+  });
+  eqParts.forEach((n,i)=>{                   // 3. the equation assembles in sync
+    const p=ease.out(seg(t,4300+i*190,4700+i*190));
+    n.style.opacity=.15+.85*p; n.style.transform=`translateX(${(1-p)*-10}px)`;
+  });
+  glow.style.setProperty('--a',(t*.045)+'deg'); // 4. ambient CTA glow
+  glow.style.opacity=.25+.35*ease.out(seg(t,5800,6800));
+});
+</script>
+</body>
+</html>

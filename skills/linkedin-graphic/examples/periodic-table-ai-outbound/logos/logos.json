@@ -1,0 +1,232 @@
+{
+  "Apollo": {
+    "file": "apollo.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#6A5CF5"
+  },
+  "ZoomInfo": {
+    "file": "zoominfo.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#0EA5E9"
+  },
+  "Sales Navigator": {
+    "file": "salesnavigator.svg",
+    "source": "simple-icons",
+    "hex": "#0A66C2"
+  },
+  "Ocean.io": {
+    "file": "oceandotio.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#E11D74"
+  },
+  "Crunchbase": {
+    "file": "crunchbase.svg",
+    "source": "simple-icons",
+    "hex": "#0288D1"
+  },
+  "BuiltWith": {
+    "file": "builtwith.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#111827"
+  },
+  "RB2B": {
+    "file": "rb2b.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#2F8CF0"
+  },
+  "Common Room": {
+    "file": "commonroom.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#B24FE0"
+  },
+  "Trigify": {
+    "file": "trigify.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#E11D74"
+  },
+  "Koala": {
+    "file": "koala.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#111827"
+  },
+  "Bombora": {
+    "file": "bombora.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#F0384F"
+  },
+  "Clay": {
+    "file": "clay.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#2F8CF0"
+  },
+  "Prospeo": {
+    "file": "prospeo.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#13A07A"
+  },
+  "FullEnrich": {
+    "file": "fullenrich.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#13A07A"
+  },
+  "Findymail": {
+    "file": "findymail.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#111827"
+  },
+  "LeadMagic": {
+    "file": "leadmagic.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#E11D74"
+  },
+  "Hunter": {
+    "file": "hunter.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#13A07A"
+  },
+  "Claude": {
+    "file": "claude.svg",
+    "source": "simple-icons",
+    "hex": "#D97757"
+  },
+  "ChatGPT": {
+    "file": "chatgpt.svg",
+    "source": "simple-icons",
+    "hex": "#412991"
+  },
+  "Perplexity": {
+    "file": "perplexity.svg",
+    "source": "simple-icons",
+    "hex": "#1FB8CD"
+  },
+  "Exa": {
+    "file": "exa.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#4B5563"
+  },
+  "Firecrawl": {
+    "file": "firecrawl.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#B24FE0"
+  },
+  "Gemini": {
+    "file": "gemini.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#B24FE0"
+  },
+  "Instantly": {
+    "file": "instantly.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#B24FE0"
+  },
+  "Smartlead": {
+    "file": "smartlead.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#F0384F"
+  },
+  "Lemlist": {
+    "file": "lemlist.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#13A07A"
+  },
+  "HeyReach": {
+    "file": "heyreach.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#13A07A"
+  },
+  "Outreach": {
+    "file": "outreach.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#F0384F"
+  },
+  "Salesloft": {
+    "file": "salesloft.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#13A07A"
+  },
+  "Google Workspace": {
+    "file": "googleworkspace.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#E11D74"
+  },
+  "Microsoft 365": {
+    "file": "microsoft365.png",
+    "source": "website",
+    "hex": null
+  },
+  "Mailforge": {
+    "file": "mailforge.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#0EA5E9"
+  },
+  "MXToolbox": {
+    "file": "mxtoolbox.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#F0384F"
+  },
+  "GlockApps": {
+    "file": "glockapps.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#6A5CF5"
+  },
+  "n8n": {
+    "file": "n8n.svg",
+    "source": "simple-icons",
+    "hex": "#EA4B71"
+  },
+  "Make": {
+    "file": "make.svg",
+    "source": "simple-icons",
+    "hex": "#6D00CC"
+  },
+  "Zapier": {
+    "file": "zapier.svg",
+    "source": "simple-icons",
+    "hex": "#FF4F00"
+  },
+  "Relevance AI": {
+    "file": "relevanceai.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#0EA5E9"
+  },
+  "Claude Code": {
+    "file": "claudecode.svg",
+    "source": "simple-icons",
+    "hex": "#D97757"
+  },
+  "HubSpot": {
+    "file": "hubspot.svg",
+    "source": "simple-icons",
+    "hex": "#FF7A59"
+  },
+  "Salesforce": {
+    "file": "salesforce.svg",
+    "source": "simple-icons",
+    "hex": "#00A1E0"
+  },
+  "Attio": {
+    "file": "attio.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#13A07A"
+  },
+  "Pipedrive": {
+    "file": "pipedrive.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#E11D74"
+  },
+  "Calendly": {
+    "file": "calendly.svg",
+    "source": "simple-icons",
+    "hex": "#006BFF"
+  },
+  "Chili Piper": {
+    "file": "chilipiper.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#111827"
+  },
+  "Gong": {
+    "file": "gong.svg",
+    "source": "monogram-PLACEHOLDER",
+    "hex": "#111827"
+  }
+}

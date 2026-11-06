@@ -1,0 +1,1 @@
+canvas 1080×1350  motion 8500ms  text elements 54  words 168  images 6

@@ -1,0 +1,32 @@
+{
+  "Twilio": {
+    "file": "twilio.svg",
+    "source": "simple-icons",
+    "hex": "#F22F46"
+  },
+  "OpenAI": {
+    "file": "openai.svg",
+    "source": "simple-icons",
+    "hex": "#412991"
+  },
+  "HubSpot": {
+    "file": "hubspot.svg",
+    "source": "simple-icons",
+    "hex": "#FF7A59"
+  },
+  "Calendly": {
+    "file": "calendly.svg",
+    "source": "simple-icons",
+    "hex": "#006BFF"
+  },
+  "Slack": {
+    "file": "slack.svg",
+    "source": "simple-icons",
+    "hex": "#4A154B"
+  },
+  "Google Calendar": {
+    "file": "googlecalendar.svg",
+    "source": "simple-icons",
+    "hex": "#4285F4"
+  }
+}

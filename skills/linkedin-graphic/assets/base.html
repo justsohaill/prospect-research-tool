@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!--
+  LinkedIn Graphic — base template.
+  Copy this file, keep the <head> + runtime, replace everything inside #canvas.
+  Canvas size is read by scripts/render.mjs from the meta tag below.
+-->
+<meta name="canvas" content="1080x1350">
+<meta name="motion" content="duration=8000; still=end">
+<title>LinkedIn Graphic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300..900;1,300..900&family=Inter:wght@300..800&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Archivo:wght@600..900&display=block" rel="stylesheet">
+<style>
+/* ───────────────────────── TOKENS ───────────────────────── */
+:root{
+  --W:1080px; --H:1350px;
+  --pad:64px;                    /* outer safe margin; never put text closer to the edge */
+  --r-lg:22px; --r-md:14px; --r-sm:9px;
+  --f-display:"Inter Tight", Inter, system-ui, sans-serif;
+  --f-body:Inter, system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, monospace;
+  --f-serif:"Instrument Serif", Georgia, serif;
+  --f-heavy:Archivo, "Inter Tight", sans-serif;
+}
+
+/* Theme: PAPER — warm cream, grid paper, one hot accent (editorial / research / rosters) */
+[data-theme="paper"]{
+  --bg:#F3EEE6; --bg-2:#EBE4D8; --surface:#FBF8F3; --surface-2:#FFFFFF;
+  --ink:#16130F; --ink-2:#4A443C; --ink-3:#8C857A; --line:#DDD5C8; --line-2:#CFC5B5;
+  --grid:rgba(60,45,25,.07);
+  --accent:#E0452B; --accent-2:#1F4D36; --accent-soft:rgba(224,69,43,.10);
+  --glow:0 0 0 transparent;
+  --shadow:0 1px 0 rgba(255,255,255,.8) inset, 0 10px 30px -12px rgba(60,40,20,.25), 0 2px 6px -2px rgba(60,40,20,.12);
+}
+/* Theme: INK — deep navy/black, glass + neon glow (systems / playbooks / "machines") */
+[data-theme="ink"]{
+  --bg:#070B14; --bg-2:#0C1322; --surface:rgba(255,255,255,.035); --surface-2:rgba(255,255,255,.07);
+  --ink:#F2F5FA; --ink-2:#B7C0D0; --ink-3:#6E7A90; --line:rgba(255,255,255,.10); --line-2:rgba(255,255,255,.18);
+  --grid:rgba(255,255,255,.035);
+  --accent:#4C8DFF; --accent-2:#7CF0B5; --accent-soft:rgba(76,141,255,.14);
+  --glow:0 0 24px rgba(76,141,255,.55), 0 0 2px rgba(150,190,255,.9);
+  --shadow:0 0 0 1px rgba(255,255,255,.06) inset, 0 20px 40px -20px rgba(0,0,0,.8);
+}
+/* Theme: STUDIO — clean light grey, multi-hue category system (org charts / teams / stacks) */
+[data-theme="studio"]{
+  --bg:#F4F6F9; --bg-2:#ECEFF4; --surface:#FFFFFF; --surface-2:#F8FAFC;
+  --ink:#0B0D12; --ink-2:#3D4452; --ink-3:#8A93A3; --line:#E3E7EE; --line-2:#D3D9E2;
+  --grid:rgba(20,30,60,.04);
+  --accent:#3FAE2A; --accent-2:#0B0D12; --accent-soft:rgba(63,174,42,.12);
+  --glow:0 0 0 transparent;
+  --shadow:0 1px 0 #fff inset, 0 12px 28px -14px rgba(20,30,60,.25), 0 2px 5px -2px rgba(20,30,60,.10);
+  /* category hues — use in order, one per group */
+  --c1:#3FAE2A; --c2:#2F8CF0; --c3:#6A5CF5; --c4:#B24FE0; --c5:#F0384F; --c6:#FF9F1A;
+  --c7:#F5B70A; --c8:#F24B3A; --c9:#22C1B0; --c10:#38A5D8; --c11:#9A7B4F; --c12:#5B6170;
+}
+
+/* ───────────────────────── RESET + CANVAS ───────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#d9d9d9}
+body{display:grid;place-items:center;min-height:100vh;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+#canvas{
+  position:relative; width:var(--W); height:var(--H); overflow:hidden;
+  background:var(--bg); color:var(--ink); font-family:var(--f-body);
+  font-feature-settings:"ss01","cv11","tnum";
+}
+body.render{background:transparent}
+
+/* backgrounds — stack as many as the theme needs */
+.bg-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px}
+.bg-grid.major{background-size:120px 120px;opacity:1.6}
+.bg-dots{position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(var(--grid) 1.2px,transparent 1.3px);background-size:22px 22px}
+.bg-wash{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(60% 35% at 15% 0%,var(--wash-a,rgba(255,120,200,.20)),transparent 70%),
+             radial-gradient(50% 40% at 100% 10%,var(--wash-b,rgba(255,200,120,.16)),transparent 70%)}
+.bg-vignette{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 40%,transparent 55%,rgba(0,0,0,.35))}
+.bg-noise{position:absolute;inset:0;pointer-events:none;opacity:.06;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+[data-theme="ink"] .bg-noise{mix-blend-mode:screen;opacity:.05}
+.crop{position:absolute;width:14px;height:14px;border-color:var(--ink-3);border-style:solid;opacity:.6}
+.crop.tl{top:28px;left:28px;border-width:1.5px 0 0 1.5px}.crop.tr{top:28px;right:28px;border-width:1.5px 1.5px 0 0}
+.crop.bl{bottom:28px;left:28px;border-width:0 0 1.5px 1.5px}.crop.br{bottom:28px;right:28px;border-width:0 1.5px 1.5px 0}
+
+/* ───────────────────────── TYPE ───────────────────────── */
+.eyebrow{font:600 12px/1 var(--f-mono);letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3)}
+.eyebrow.accent{color:var(--accent)}
+.h1{font:800 76px/.96 var(--f-display);letter-spacing:-.045em;color:var(--ink)}
+.h1.light{font-weight:400;letter-spacing:-.055em}          /* editorial: regular weight, very tight */
+.h1.heavy{font-family:var(--f-heavy);font-weight:900;letter-spacing:-.035em;text-transform:uppercase}
+.h1.serif{font-family:var(--f-serif);font-weight:400;letter-spacing:-.02em}
+.sub{font:400 22px/1.3 var(--f-body);letter-spacing:-.01em;color:var(--ink-2)}
+.sub.serif{font:italic 400 27px/1.2 var(--f-serif);letter-spacing:0}
+.h3{font:700 20px/1.1 var(--f-display);letter-spacing:-.02em}
+.label{font:600 14px/1.15 var(--f-body);letter-spacing:-.005em;color:var(--ink)}
+.small{font:400 11.5px/1.25 var(--f-body);color:var(--ink-3)}
+.mono{font-family:var(--f-mono);font-size:13px;letter-spacing:-.01em}
+.count{font:500 11px var(--f-mono);color:var(--ink-3);margin-left:5px}
+.num{font:700 56px/1 var(--f-display);letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+
+/* headline emphasis devices — use exactly ONE per headline */
+.hl-color{color:var(--accent)}
+.hl-grad{background:linear-gradient(100deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hl-mark{background:var(--mark,#F784E8);padding:0 .08em;margin:0 -.02em;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.hl-dot::after{content:".";color:var(--accent)}
+.hl-glow{color:var(--accent);text-shadow:var(--glow)}
+
+/* ───────────────────────── COMPONENTS ───────────────────────── */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow)}
+[data-theme="ink"] .card{backdrop-filter:blur(6px)}
+.chip{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:999px;
+  border:1px solid var(--line-2);background:var(--surface-2);font:600 12px var(--f-body);color:var(--ink-2);white-space:nowrap}
+.chip.solid{background:var(--accent);border-color:transparent;color:#fff}
+.tag{display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:5px;
+  font:700 10.5px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:#fff}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.dot.live{box-shadow:0 0 0 4px var(--accent-soft)}
+.check{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--accent);flex:none}
+.check::after{content:"";width:8px;height:4px;border:2px solid #fff;border-top:0;border-right:0;transform:translateY(-1px) rotate(-45deg)}
+
+/* logo tile — the "app icon" look used for every tool / company */
+.tile{--s:36px;width:var(--s);height:var(--s);border-radius:calc(var(--s)*.26);flex:none;display:grid;place-items:center;
+  background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.06),0 3px 8px -3px rgba(0,0,0,.25);overflow:hidden}
+.tile img,.tile svg{width:62%;height:62%;object-fit:contain}
+.tile.full img{width:100%;height:100%}
+.tile.mono-tile{font:800 calc(var(--s)*.42)/1 var(--f-display);letter-spacing:-.04em;color:#fff}
+[data-theme="ink"] .tile{box-shadow:0 0 0 1px rgba(255,255,255,.12),0 4px 12px -4px rgba(0,0,0,.8)}
+
+/* avatar — real headshot or initials; ring + optional halo/badge */
+.avatar{--s:56px;position:relative;width:var(--s);height:var(--s);border-radius:50%;flex:none;
+  background:var(--bg-2) center/cover;box-shadow:0 0 0 3px var(--surface-2),0 0 0 4.5px var(--ring,var(--line-2)),0 8px 18px -8px rgba(0,0,0,.45)}
+.avatar.initials{display:grid;place-items:center;font:700 calc(var(--s)*.36) var(--f-display);color:var(--ink-2);letter-spacing:-.03em}
+.avatar .badge{position:absolute;right:-4px;bottom:-4px;--s:22px}
+
+/* brand bar (top) + author pill */
+.brandbar{display:flex;align-items:center;gap:10px;font:700 24px var(--f-display);letter-spacing:-.03em}
+.author-pill{display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 20px 0 6px;border-radius:999px;
+  background:var(--surface-2);box-shadow:var(--shadow);font:600 17px var(--f-display);letter-spacing:-.02em}
+.author-pill .avatar{--s:36px;box-shadow:none}
+
+/* footer */
+.footer{position:absolute;left:var(--pad);right:var(--pad);bottom:34px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.footer .who{display:flex;align-items:center;gap:12px}
+.footer .who b{font:700 17px var(--f-display);letter-spacing:-.02em;display:block}
+.footer .who span{font:400 13px var(--f-mono);color:var(--ink-3)}
+.footer .tagline{font:500 11px var(--f-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3);text-align:right}
+.footer-rule{position:absolute;left:var(--pad);right:var(--pad);height:1px;background:var(--line)}
+
+/* comment-to-get CTA (lead magnet posts) */
+.cta{position:relative;display:flex;align-items:center;justify-content:center;gap:16px;height:96px;border-radius:999px;
+  background:#0B0D12;color:#fff;font:600 34px var(--f-display);letter-spacing:-.03em}
+.cta .kw{color:var(--cta-kw,#B6F25A);font-weight:800}
+.cta .arrow{position:absolute;right:14px;width:68px;height:68px;border-radius:50%;background:#fff;color:#0B0D12;display:grid;place-items:center;font-size:30px}
+.cta-glow{position:absolute;inset:-14px;border-radius:999px;filter:blur(18px);opacity:.75;z-index:-1;
+  background:conic-gradient(from var(--a,0deg),#7CF0B5,#4C8DFF,#B24FE0,#FF9F1A,#B6F25A,#7CF0B5)}
+.cta-sub{text-align:center;margin-top:16px;font:400 17px var(--f-body);color:var(--ink-3)}
+
+/* connectors (SVG) */
+svg .wire{fill:none;stroke:var(--line-2);stroke-width:1.5}
+svg .wire.accent{stroke:var(--accent);stroke-width:2}
+svg .wire.dash{stroke-dasharray:4 5}
+
+/* ───────────────────────── RECORD MODE ───────────────────────── */
+/* render.mjs adds .render to <body>; nothing else should differ between live and render */
+</style>
+</head>
+<body>
+
+<div id="canvas" data-theme="paper">
+  <div class="bg-grid"></div>
+  <div class="bg-noise"></div>
+  <i class="crop tl"></i><i class="crop tr"></i><i class="crop bl"></i><i class="crop br"></i>
+
+  <!-- HEADER -->
+  <header style="position:absolute;left:var(--pad);right:var(--pad);top:54px">
+    <div class="brandbar">Brand</div>
+    <h1 class="h1 light" style="margin-top:22px">Headline with one <span class="hl-mark">word</span></h1>
+    <p class="sub" style="margin-top:14px">One line that says what the reader gets.</p>
+  </header>
+
+  <!-- HERO VISUAL: the metaphor lives here (≈ 70% of the canvas) -->
+  <main id="hero" style="position:absolute;left:var(--pad);right:var(--pad);top:270px;bottom:120px"></main>
+
+  <!-- FOOTER -->
+  <div class="footer-rule" style="bottom:100px"></div>
+  <footer class="footer">
+    <div class="who"><div class="avatar initials" style="--s:44px">AB</div><div><b>Author Name</b><span>domain.com</span></div></div>
+    <div class="tagline">Short proof line · numbers · timeframe</div>
+  </footer>
+</div>
+
+<script>
+/* ───────────────────────── MOTION RUNTIME ─────────────────────────
+   Contract (do not break — render.mjs depends on it):
+   • Every animated value is a pure function of time t (ms). No setTimeout/setInterval,
+     no transitions triggered by class toggles, no Math.random() at draw time (use rng()).
+   • CSS @keyframes animations are fine: the renderer pauses them and sets currentTime.
+   • JS animation: Motion.on(t => {...}) — called every frame with t in [0, duration].
+   • window.__seek(ms) renders the exact frame at ms. Live preview loops automatically.
+*/
+const Motion = (() => {
+  const meta = Object.fromEntries((document.querySelector('meta[name=motion]')?.content || '')
+    .split(';').map(s => s.trim().split('=')).filter(p => p[0]));
+  const duration = +meta.duration || 8000;
+  const fns = [];
+  const rendering = new URLSearchParams(location.search).has('render');
+  const api = {
+    duration, rendering,
+    on(fn){ fns.push(fn); return api; },
+    draw(t){ for (const f of fns) f(t); },
+    /* helpers */
+    clamp:(v,a=0,b=1)=>Math.min(b,Math.max(a,v)),
+    seg(t,a,b){ return api.clamp((t-a)/(b-a)); },                 // 0→1 progress between a and b ms
+    ease:{ out:p=>1-Math.pow(1-p,3), inOut:p=>p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2, back:p=>1+2.7*Math.pow(p-1,3)+1.7*Math.pow(p-1,2) },
+    lerp:(a,b,p)=>a+(b-a)*p,
+    fmt(n,{dec=0,k=false}={}){ if(k&&n>=1000) return (n/1000).toFixed(1)+'K'; return n.toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec}); },
+    rng(seed=7){ return ()=>{ seed|=0; seed=seed+0x6D2B79F5|0; let x=Math.imul(seed^seed>>>15,1|seed); x=x+Math.imul(x^x>>>7,61|x)^x; return ((x^x>>>14)>>>0)/4294967296; }; },
+    /* split-flap / scramble text reveal: returns string at progress p */
+    scramble(text,p,chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'){
+      const n=text.length, done=Math.floor(p*n); let s='';
+      for(let i=0;i<n;i++){ const c=text[i]; s += (i<done||c===' ')?c:chars[(i*7+Math.floor(p*40))%chars.length]; }
+      return s;
+    },
+  };
+  window.__seek = (ms) => {
+    document.getAnimations().forEach(a => { a.pause(); a.currentTime = ms; });
+    api.draw(Math.min(ms, duration));
+  };
+  window.__motion = { duration, still: meta.still || 'end' };
+  if (rendering) { document.body.classList.add('render'); }
+  else {
+    const t0 = performance.now(), hold = 1500;
+    /* live preview drives CSS + JS from the same clock, so it looks exactly like the export */
+    (function loop(now){ const t = (now - t0) % (duration + hold); window.__seek(Math.min(t, duration)); requestAnimationFrame(loop); })(t0);
+  }
+  return api;
+})();
+</script>
+</body>
+</html>
