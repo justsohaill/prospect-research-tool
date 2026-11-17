@@ -7,7 +7,8 @@
     "assets": "node scripts/gen-assets.js",
     "captions": "node scripts/check-captions.js",
     "stills": "node scripts/render.js --stills 13.6,24.9,28.7,40.4,64",
-    "render": "node scripts/render.js --all"
+    "music": "node scripts/make-music.js",
+    "render": "node scripts/make-music.js && node scripts/render.js --all --audio out/music.wav"
   },
   "devDependencies": {
     "lucide-static": "^0.460.0",

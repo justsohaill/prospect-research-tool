@@ -3,7 +3,7 @@
 //   node scripts/render.js --stills 6.5,17.5,34.5     PNG stills at those seconds -> out/stills/
 //   node scripts/render.js --sheet                    low-res contact sheet per scene -> out/sheets/ (QA)
 //   node scripts/render.js --scene s03                one scene -> out/scenes/s03.mp4
-//   node scripts/render.js --all                      every scene, then joined -> out/cernis-launch.mp4
+//   node scripts/render.js --all                      every scene (4 in parallel; --jobs N to change), then joined -> out/cernis-launch.mp4
 //   add --audio path/to/track.wav to mux a music bed into the joined file
 const { chromium } = require('playwright');
 const { spawn, spawnSync } = require('child_process');
@@ -89,9 +89,26 @@ async function renderScene(page, sc) {
   const { browser, page, scenes } = await open(SS);
   const todo = arg('all') ? scenes : scenes.filter((s) => s.id === arg('scene'));
   if (!todo.length) throw new Error('nothing to render: pass --all, --scene <id>, --stills <t,...> or --sheet');
-  const files = [];
-  for (const sc of todo) files.push(await renderScene(page, sc));
-  await browser.close();
+  let files = [];
+  const jobs = +(arg('jobs') || 4);
+  if (arg('all') && jobs > 1) {
+    // One child process per scene, `jobs` at a time (longest scenes first), each writing its own file.
+    await browser.close();
+    const queue = [...todo].sort((x, y) => y.dur - x.dur);
+    const worker = async () => {
+      for (let sc = queue.shift(); sc; sc = queue.shift()) {
+        await new Promise((res, rej) => {
+          const c = spawn(process.execPath, [__filename, '--scene', sc.id], { stdio: 'inherit' });
+          c.on('close', (code) => (code ? rej(new Error(`scene ${sc.id} failed (${code})`)) : res()));
+        });
+      }
+    };
+    await Promise.all(Array.from({ length: jobs }, worker));
+    files = todo.map((sc) => path.join(out, 'scenes', sc.id + '.mp4'));
+  } else {
+    for (const sc of todo) files.push(await renderScene(page, sc));
+    await browser.close();
+  }
 
   if (arg('all')) {
     const list = path.join(out, 'scenes', 'list.txt');
