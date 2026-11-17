@@ -17,7 +17,8 @@ const out = path.join(root, 'out');
 const arg = (n) => { const i = process.argv.indexOf('--' + n); return i < 0 ? null : process.argv[i + 1] || true; };
 
 async function open(scale) {
-  const browser = await chromium.launch();
+  // One raster tile for the whole 2x frame keeps large soft shadows perfectly smooth.
+  const browser = await chromium.launch({ args: ['--default-tile-width=4096', '--default-tile-height=4096'] });
   const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: scale });
   page.on('pageerror', (e) => { console.error('PAGE ERROR:', e.message); process.exitCode = 1; });
   await page.goto('file://' + path.join(root, 'src/index.html') + '?render');

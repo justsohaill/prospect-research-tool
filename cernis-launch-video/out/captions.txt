@@ -1,0 +1,20 @@
+  #  at      words  hold   capH   box(x0-x1, y0-y1)        text
+  1   4.75s    9   1.50s  81px  194-886, 490-859               Give every hire an expert who knows the job.   <-- 9 words (official tagline, kept whole (9 words))
+  2   8.25s    5   2.50s  81px  298-782, 118-370               Post a role for free.
+  3  12.75s    5   1.50s  81px  224-856, 118-370               Experts who know the role
+  4  15.75s    4   1.95s  81px  328-752, 118-370               compete to fill it.
+  5  19.25s    3   1.50s  81px  271-809, 118-370               Cernis runs sourcing.
+  6  21.50s    3   1.50s  81px  271-809, 118-370               Cernis runs screening.
+  7  23.75s    3   1.50s  81px  241-839, 118-370               Cernis runs assessment.
+  8  27.50s    6   1.50s  81px  145-935, 118-487               Compare ranked shortlists side by side.
+  9  30.50s    4   1.70s  81px  277-803, 118-370               Then make the hire.
+ 10  34.25s    5   1.50s  81px  266-814, 118-487               24 hours to ideal candidates.
+ 11  38.00s    6   2.75s  81px  237-843, 118-370               48 hours to a closed hire.
+ 12  42.75s    5   2.50s  81px  253-827, 118-370               Pay 10–15%, only on hire.
+ 13  47.25s    5   1.50s  81px  186-894, 118-487               Free replacement within 60 days.
+ 14  50.25s    3   1.50s  81px  289-791, 549-801               Hiring right now?
+ 15  53.25s    3   1.50s  81px  301-779, 549-801               Comment the role.
+ 16  57.75s    9   1.50s  81px  148-932, 490-859               We'll DM you the experts who'd work on it.   <-- 9 words (your wording, kept whole (9 words))
+ 17  60.85s    3   4.15s  81px  280-800, 694-946               Comment your role ↓
+
+font: "Inter Display", Inter, sans-serif | total 65s | end card static for 4.25s

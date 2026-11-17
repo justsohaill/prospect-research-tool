@@ -5,11 +5,11 @@
   "description": "HTML/CSS launch video for cernis.ai, rendered frame by frame with headless Chromium and encoded with ffmpeg.",
   "scripts": {
     "assets": "node scripts/gen-assets.js",
-    "stills": "node scripts/render.js --stills 6.5,17.5,34.5",
+    "captions": "node scripts/check-captions.js",
+    "stills": "node scripts/render.js --stills 13.6,24.9,28.7,40.4,64",
     "render": "node scripts/render.js --all"
   },
   "devDependencies": {
-    "@fontsource-variable/geist": "^5.2.5",
     "lucide-static": "^0.460.0",
     "simple-icons": "9.21.0"
   }
